@@ -14,6 +14,8 @@ A complete SAP MM procurement dashboard project built with HTML, CSS, and JavaSc
 - Local storage persistence for POs and vendor records
 - Keyboard shortcuts: `Ctrl+S` to save a PO, `Ctrl+G` to post goods receipt
 
+![alt text](preview.png)
+
 ## Getting Started
 
 ### Prerequisites
