@@ -1,0 +1,30 @@
+{
+    "version": 2,
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist",
+    "env": {
+        "NODE_ENV": "production"
+    },
+    "functions": {
+        "api/**/*.js": {
+            "maxDuration": 10
+        }
+    },
+    "headers": [
+        {
+            "source": "/assets/(.*)",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=31536000, immutable"
+                }
+            ]
+        }
+    ],
+    "rewrites": [
+        {
+            "source": "/:path((?!_next/.*|_vercel/.*|.*\\..*|$).*)",
+            "destination": "/index.html"
+        }
+    ]
+}
