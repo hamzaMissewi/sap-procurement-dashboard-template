@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SAP Procurement Dashboard</title>
+        <link rel="stylesheet" href="/src/styles.css" />
+    </head>
+    <body>
+        <div class="sap-shell">
+            <header class="sap-topbar">
+                <div class="sap-logo">
+                    <span class="sap-badge">MM</span> SAP S/4HANA Procurement
+                    Dashboard
+                </div>
+                <div class="sap-topbar-right">
+                    <button class="icon-button" aria-label="Notifications">
+                        <span class="icon">🔔</span><strong>3</strong>
+                    </button>
+                    <div class="topbar-user">H.MISSAOUI · MM02</div>
+                    <button class="icon-button" aria-label="Help">?</button>
+                </div>
+            </header>
+
+            <nav class="sap-nav" aria-label="Primary navigation">
+                <button class="sap-nav-item active" data-view="dashboard">
+                    Dashboard
+                </button>
+                <button class="sap-nav-item" data-view="po-list">
+                    Purchase Orders
+                </button>
+                <button class="sap-nav-item" data-view="po-create">
+                    Create PO
+                </button>
+                <button class="sap-nav-item" data-view="vendors">
+                    Vendor Master
+                </button>
+                <button class="sap-nav-item" data-view="analytics">
+                    Analytics
+                </button>
+                <button class="sap-nav-item" data-view="gr">
+                    Goods Receipt
+                </button>
+            </nav>
+
+            <div class="sap-body">
+                <aside class="sap-sidebar" aria-label="Secondary navigation">
+                    <div class="sap-sidebar-section">Quick Access</div>
+                    <button
+                        class="sap-sidebar-item active"
+                        data-view="dashboard">
+                        Dashboard
+                    </button>
+                    <button class="sap-sidebar-item" data-view="po-list">
+                        My PO List
+                    </button>
+                    <button class="sap-sidebar-item" data-view="po-create">
+                        New Purchase Order
+                    </button>
+                    <div class="sap-sidebar-section">Procurement</div>
+                    <button class="sap-sidebar-item" data-view="vendors">
+                        Vendors
+                    </button>
+                    <button class="sap-sidebar-item" data-view="gr">
+                        Goods Receipt
+                    </button>
+                    <button class="sap-sidebar-item" data-view="invoice">
+                        Invoice Verify
+                    </button>
+                    <div class="sap-sidebar-section">Reports</div>
+                    <button class="sap-sidebar-item" data-view="analytics">
+                        Spend Analytics
+                    </button>
+                    <button class="sap-sidebar-item" data-action="export-po">
+                        Export POs
+                    </button>
+                    <button class="sap-sidebar-item" data-action="refresh-data">
+                        Refresh Data
+                    </button>
+                </aside>
+
+                <main class="sap-main">
+                    <section id="view-dashboard" class="view active"></section>
+                    <section id="view-po-list" class="view"></section>
+                    <section id="view-po-create" class="view"></section>
+                    <section id="view-po-detail" class="view"></section>
+                    <section id="view-vendors" class="view"></section>
+                    <section id="view-analytics" class="view"></section>
+                    <section id="view-gr" class="view"></section>
+                    <section id="view-invoice" class="view"></section>
+                </main>
+            </div>
+        </div>
+
+        <script type="module" src="/src/main.js"></script>
+    </body>
+</html>

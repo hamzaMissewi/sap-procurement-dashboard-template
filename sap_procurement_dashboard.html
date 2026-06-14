@@ -1,0 +1,875 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+
+.sap-shell {
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  min-height: 600px;
+}
+.sap-topbar {
+  background: #1565c0;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 44px;
+  flex-shrink: 0;
+}
+.sap-logo { font-size: 15px; font-weight: 500; letter-spacing: 0.5px; }
+.sap-topbar-right { display: flex; align-items: center; gap: 16px; font-size: 13px; opacity: 0.9; }
+.sap-nav {
+  background: #1a237e;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 16px;
+  height: 36px;
+}
+.sap-nav-item {
+  color: rgba(255,255,255,0.75);
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.sap-nav-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.sap-nav-item.active { background: rgba(255,255,255,0.18); color: #fff; font-weight: 500; }
+
+.sap-body {
+  display: flex;
+  background: var(--color-background-tertiary);
+  min-height: 560px;
+}
+.sap-sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  background: var(--color-background-secondary);
+  border-right: 0.5px solid var(--color-border-tertiary);
+  padding: 8px 0;
+}
+.sap-sidebar-section { padding: 12px 16px 4px; font-size: 10px; font-weight: 500; color: var(--color-text-tertiary); letter-spacing: 0.8px; text-transform: uppercase; }
+.sap-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.sap-sidebar-item:hover { background: var(--color-background-primary); color: var(--color-text-primary); }
+.sap-sidebar-item.active { background: #e3f2fd; color: #1565c0; font-weight: 500; border-right: 2px solid #1565c0; }
+
+.sap-main { flex: 1; overflow: auto; padding: 16px; }
+
+.sap-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.sap-page-title { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+.sap-breadcrumb { font-size: 12px; color: var(--color-text-tertiary); margin-bottom: 4px; }
+
+.btn-sap {
+  background: #1565c0;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 7px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+}
+.btn-sap:hover { background: #1976d2; }
+.btn-sap-outline {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: 4px;
+  padding: 7px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+}
+.btn-sap-outline:hover { background: var(--color-background-secondary); }
+
+.metric-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+.metric-card {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 12px 14px;
+}
+.metric-label { font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 4px; }
+.metric-value { font-size: 20px; font-weight: 500; color: var(--color-text-primary); }
+.metric-delta { font-size: 11px; margin-top: 2px; }
+.delta-up { color: #2e7d32; }
+.delta-down { color: #c62828; }
+
+.section-card {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.section-card-header {
+  padding: 10px 14px;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.section-card-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+
+.sap-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.sap-table th { padding: 8px 12px; text-align: left; font-weight: 500; font-size: 11px; color: var(--color-text-tertiary); background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); white-space: nowrap; }
+.sap-table td { padding: 8px 12px; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-primary); vertical-align: middle; }
+.sap-table tr:last-child td { border-bottom: none; }
+.sap-table tr:hover td { background: var(--color-background-secondary); }
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.status-approved { background: #e8f5e9; color: #2e7d32; }
+.status-pending { background: #fff8e1; color: #f57f17; }
+.status-rejected { background: #ffebee; color: #c62828; }
+.status-draft { background: #f3e5f5; color: #6a1b9a; }
+.status-ordered { background: #e3f2fd; color: #1565c0; }
+.status-received { background: #e0f7fa; color: #00695c; }
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+  flex-wrap: wrap;
+}
+.sap-input {
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 12px;
+  color: var(--color-text-primary);
+  background: var(--color-background-primary);
+  font-family: var(--font-sans);
+  outline: none;
+}
+.sap-input:focus { border-color: #1565c0; }
+.sap-select {
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  background: var(--color-background-primary);
+  font-family: var(--font-sans);
+  cursor: pointer;
+}
+
+.chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.chart-wrap { position: relative; height: 180px; }
+
+.vendor-score { display: inline-block; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; }
+
+.tab-bar { display: flex; gap: 0; border-bottom: 0.5px solid var(--color-border-tertiary); margin-bottom: 0; }
+.tab { padding: 8px 16px; font-size: 12px; cursor: pointer; color: var(--color-text-secondary); border-bottom: 2px solid transparent; }
+.tab.active { color: #1565c0; border-bottom-color: #1565c0; font-weight: 500; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.po-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 14px; }
+.field-group { margin-bottom: 10px; }
+.field-label { font-size: 10px; color: var(--color-text-tertiary); margin-bottom: 2px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+.field-value { font-size: 13px; color: var(--color-text-primary); }
+
+.progress-bar-wrap { background: var(--color-background-secondary); border-radius: 4px; height: 6px; overflow: hidden; }
+.progress-bar-fill { height: 100%; border-radius: 4px; background: #1565c0; }
+
+.alert-banner {
+  padding: 8px 14px;
+  border-left: 3px solid;
+  border-radius: 0 4px 4px 0;
+  font-size: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.alert-warning { background: #fff8e1; border-color: #f9a825; color: #e65100; }
+.alert-info { background: #e3f2fd; border-color: #1565c0; color: #0d47a1; }
+</style>
+
+<h2 class="sr-only">SAP Procurement Management Dashboard — MM module with purchase orders, vendor management, and analytics</h2>
+
+<div class="sap-shell">
+  <div class="sap-topbar">
+    <span class="sap-logo"><i class="ti ti-circle-dot" aria-hidden="true" style="font-size:18px;vertical-align:-2px;margin-right:6px;"></i>SAP S/4HANA — Procurement</span>
+    <div class="sap-topbar-right">
+      <span><i class="ti ti-bell" aria-hidden="true"></i> 3</span>
+      <span><i class="ti ti-user-circle" aria-hidden="true"></i> H.Missaoui · MM02</span>
+      <span><i class="ti ti-help-circle" aria-hidden="true"></i></span>
+    </div>
+  </div>
+  <div class="sap-nav">
+    <div class="sap-nav-item active" onclick="showView('dashboard')">Dashboard</div>
+    <div class="sap-nav-item" onclick="showView('po-list')">Purchase Orders</div>
+    <div class="sap-nav-item" onclick="showView('po-create')">Create PO</div>
+    <div class="sap-nav-item" onclick="showView('vendors')">Vendor Master</div>
+    <div class="sap-nav-item" onclick="showView('analytics')">Analytics</div>
+    <div class="sap-nav-item" onclick="showView('gr')">Goods Receipt</div>
+  </div>
+
+  <div class="sap-body">
+    <div class="sap-sidebar">
+      <div class="sap-sidebar-section">Quick Access</div>
+      <div class="sap-sidebar-item active" onclick="showView('dashboard')"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</div>
+      <div class="sap-sidebar-item" onclick="showView('po-list')"><i class="ti ti-file-invoice" aria-hidden="true"></i> My PO List</div>
+      <div class="sap-sidebar-item" onclick="showView('po-create')"><i class="ti ti-plus" aria-hidden="true"></i> New Purchase Order</div>
+      <div class="sap-sidebar-section">Procurement</div>
+      <div class="sap-sidebar-item" onclick="showView('vendors')"><i class="ti ti-building-store" aria-hidden="true"></i> Vendors</div>
+      <div class="sap-sidebar-item" onclick="showView('gr')"><i class="ti ti-package" aria-hidden="true"></i> Goods Receipt</div>
+      <div class="sap-sidebar-item"><i class="ti ti-receipt" aria-hidden="true"></i> Invoice Verify</div>
+      <div class="sap-sidebar-section">Reports</div>
+      <div class="sap-sidebar-item" onclick="showView('analytics')"><i class="ti ti-chart-bar" aria-hidden="true"></i> Spend Analytics</div>
+      <div class="sap-sidebar-item"><i class="ti ti-report" aria-hidden="true"></i> PO Reports</div>
+      <div class="sap-sidebar-item"><i class="ti ti-settings" aria-hidden="true"></i> Org Settings</div>
+    </div>
+
+    <div class="sap-main">
+      <!-- DASHBOARD VIEW -->
+      <div id="view-dashboard">
+        <div class="sap-breadcrumb">SAP S/4HANA / MM – Procurement / Dashboard</div>
+        <div class="sap-page-header">
+          <div class="sap-page-title">Procurement Overview · Plant 1000 · Org DE01</div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-sap-outline" onclick="showView('po-list')"><i class="ti ti-list" aria-hidden="true"></i> View All POs</button>
+            <button class="btn-sap" onclick="showView('po-create')"><i class="ti ti-plus" aria-hidden="true"></i> New Purchase Order</button>
+          </div>
+        </div>
+
+        <div class="alert-banner alert-warning">
+          <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+          <span>4 purchase orders pending approval — oldest is 3 days overdue · <strong>Review queue</strong></span>
+        </div>
+
+        <div class="metric-row">
+          <div class="metric-card">
+            <div class="metric-label">Open POs</div>
+            <div class="metric-value">47</div>
+            <div class="metric-delta delta-down"><i class="ti ti-arrow-up-right" aria-hidden="true"></i> +6 this week</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Total Spend (MTD)</div>
+            <div class="metric-value">€1.24M</div>
+            <div class="metric-delta delta-up"><i class="ti ti-arrow-down-right" aria-hidden="true"></i> −8% vs last month</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Pending Approval</div>
+            <div class="metric-value" style="color:#e65100;">4</div>
+            <div class="metric-delta" style="color:var(--color-text-tertiary);">2 urgent · 2 standard</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">On-Time Delivery</div>
+            <div class="metric-value" style="color:#2e7d32;">91%</div>
+            <div class="metric-delta delta-up"><i class="ti ti-arrow-up-right" aria-hidden="true"></i> +3% vs target</div>
+          </div>
+        </div>
+
+        <div class="chart-row">
+          <div class="section-card">
+            <div class="section-card-header">
+              <span class="section-card-title">Monthly Spend by Category</span>
+            </div>
+            <div style="padding:12px;">
+              <div class="chart-wrap"><canvas id="spendChart" role="img" aria-label="Bar chart showing monthly procurement spend by category Jan through Jun">Monthly procurement spend data across six months.</canvas></div>
+            </div>
+          </div>
+          <div class="section-card">
+            <div class="section-card-header">
+              <span class="section-card-title">PO Status Breakdown</span>
+            </div>
+            <div style="padding:12px;">
+              <div class="chart-wrap"><canvas id="statusChart" role="img" aria-label="Doughnut chart showing purchase order status distribution">PO statuses: 40% approved, 25% ordered, 18% received, 9% pending, 8% draft.</canvas></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-card-header">
+            <span class="section-card-title">Recent Purchase Orders</span>
+            <button class="btn-sap-outline" style="font-size:11px;padding:4px 10px;" onclick="showView('po-list')">View all <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+          </div>
+          <table class="sap-table">
+            <thead><tr>
+              <th>PO Number</th><th>Vendor</th><th>Material</th><th>Plant</th><th>Net Value</th><th>Delivery Date</th><th>Status</th><th>Buyer</th>
+            </tr></thead>
+            <tbody>
+              <tr onclick="showPODetail('4500001234')">
+                <td style="color:#1565c0;cursor:pointer;font-weight:500;">4500001234</td>
+                <td>Siemens AG</td><td>Industrial Motors 7.5kW</td><td>1000</td>
+                <td>€42,500</td><td>2026-06-28</td>
+                <td><span class="status-badge status-approved"><i class="ti ti-check" aria-hidden="true"></i> Approved</span></td>
+                <td>H. Missaoui</td>
+              </tr>
+              <tr>
+                <td style="color:#1565c0;cursor:pointer;font-weight:500;">4500001235</td>
+                <td>BASF SE</td><td>Chemical Compound X-12</td><td>1000</td>
+                <td>€18,900</td><td>2026-06-30</td>
+                <td><span class="status-badge status-ordered"><i class="ti ti-truck" aria-hidden="true"></i> Ordered</span></td>
+                <td>K. Weber</td>
+              </tr>
+              <tr>
+                <td style="color:#1565c0;cursor:pointer;font-weight:500;">4500001236</td>
+                <td>Bosch GmbH</td><td>Pneumatic Valves A3000</td><td>2000</td>
+                <td>€7,340</td><td>2026-07-05</td>
+                <td><span class="status-badge status-pending"><i class="ti ti-clock" aria-hidden="true"></i> Pending</span></td>
+                <td>H. Missaoui</td>
+              </tr>
+              <tr>
+                <td style="color:#1565c0;cursor:pointer;font-weight:500;">4500001237</td>
+                <td>3M Deutschland</td><td>Safety Equipment Set</td><td>1000</td>
+                <td>€3,200</td><td>2026-07-12</td>
+                <td><span class="status-badge status-draft"><i class="ti ti-pencil" aria-hidden="true"></i> Draft</span></td>
+                <td>S. Müller</td>
+              </tr>
+              <tr>
+                <td style="color:#1565c0;cursor:pointer;font-weight:500;">4500001238</td>
+                <td>ABB Ltd</td><td>Control Panel CP-400</td><td>3000</td>
+                <td>€91,000</td><td>2026-07-20</td>
+                <td><span class="status-badge status-approved"><i class="ti ti-check" aria-hidden="true"></i> Approved</span></td>
+                <td>H. Missaoui</td>
+              </tr>
+              <tr>
+                <td style="color:#1565c0;cursor:pointer;font-weight:500;">4500001239</td>
+                <td>Henkel AG</td><td>Industrial Adhesive HA-77</td><td>1000</td>
+                <td>€5,600</td><td>2026-07-01</td>
+                <td><span class="status-badge status-received"><i class="ti ti-package" aria-hidden="true"></i> Received</span></td>
+                <td>K. Weber</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PO LIST VIEW -->
+      <div id="view-po-list" style="display:none;">
+        <div class="sap-breadcrumb">SAP S/4HANA / MM / ME2M — Purchase Orders by Material</div>
+        <div class="sap-page-header">
+          <div class="sap-page-title">Purchase Order List — All Plants</div>
+          <button class="btn-sap" onclick="showView('po-create')"><i class="ti ti-plus" aria-hidden="true"></i> Create PO (ME21N)</button>
+        </div>
+        <div class="section-card">
+          <div class="filter-row">
+            <input class="sap-input" placeholder="PO Number" style="width:120px;">
+            <input class="sap-input" placeholder="Vendor" style="width:130px;">
+            <select class="sap-select">
+              <option>All Plants</option><option>1000 – Frankfurt</option><option>2000 – Munich</option><option>3000 – Hamburg</option>
+            </select>
+            <select class="sap-select">
+              <option>All Statuses</option><option>Draft</option><option>Pending</option><option>Approved</option><option>Ordered</option><option>Received</option>
+            </select>
+            <input class="sap-input" type="date" value="2026-01-01">
+            <input class="sap-input" type="date" value="2026-12-31">
+            <button class="btn-sap" style="padding:5px 12px;"><i class="ti ti-search" aria-hidden="true"></i> Search</button>
+          </div>
+          <table class="sap-table">
+            <thead><tr>
+              <th><input type="checkbox" style="margin:0;"></th>
+              <th>PO Number</th><th>Doc Type</th><th>Vendor</th><th>Material Group</th><th>Plant</th>
+              <th>Currency</th><th>Net Value</th><th>Del. Date</th><th>GR Status</th><th>Status</th>
+            </tr></thead>
+            <tbody>
+              <tr><td><input type="checkbox"></td><td style="color:#1565c0;font-weight:500;cursor:pointer;" onclick="showPODetail('4500001234')">4500001234</td><td>NB</td><td>Siemens AG (100001)</td><td>Electrical</td><td>1000</td><td>EUR</td><td>42,500.00</td><td>2026-06-28</td><td><div class="progress-bar-wrap" style="width:60px;display:inline-block;vertical-align:middle;"><div class="progress-bar-fill" style="width:100%;background:#2e7d32;"></div></div> Full</td><td><span class="status-badge status-approved">Approved</span></td></tr>
+              <tr><td><input type="checkbox"></td><td style="color:#1565c0;font-weight:500;cursor:pointer;">4500001235</td><td>NB</td><td>BASF SE (100002)</td><td>Chemicals</td><td>1000</td><td>EUR</td><td>18,900.00</td><td>2026-06-30</td><td><div class="progress-bar-wrap" style="width:60px;display:inline-block;vertical-align:middle;"><div class="progress-bar-fill" style="width:50%;"></div></div> Part</td><td><span class="status-badge status-ordered">Ordered</span></td></tr>
+              <tr><td><input type="checkbox"></td><td style="color:#1565c0;font-weight:500;cursor:pointer;">4500001236</td><td>NB</td><td>Bosch GmbH (100003)</td><td>Mech. Parts</td><td>2000</td><td>EUR</td><td>7,340.00</td><td>2026-07-05</td><td><div class="progress-bar-wrap" style="width:60px;display:inline-block;vertical-align:middle;"><div class="progress-bar-fill" style="width:0%;"></div></div> None</td><td><span class="status-badge status-pending">Pending</span></td></tr>
+              <tr><td><input type="checkbox"></td><td style="color:#1565c0;font-weight:500;cursor:pointer;">4500001237</td><td>NB</td><td>3M Deutschland (100004)</td><td>Safety</td><td>1000</td><td>EUR</td><td>3,200.00</td><td>2026-07-12</td><td><div class="progress-bar-wrap" style="width:60px;display:inline-block;vertical-align:middle;"><div class="progress-bar-fill" style="width:0%;background:#9e9e9e;"></div></div> None</td><td><span class="status-badge status-draft">Draft</span></td></tr>
+              <tr><td><input type="checkbox"></td><td style="color:#1565c0;font-weight:500;cursor:pointer;">4500001238</td><td>FO</td><td>ABB Ltd (100005)</td><td>Control Systems</td><td>3000</td><td>EUR</td><td>91,000.00</td><td>2026-07-20</td><td><div class="progress-bar-wrap" style="width:60px;display:inline-block;vertical-align:middle;"><div class="progress-bar-fill" style="width:0%;"></div></div> None</td><td><span class="status-badge status-approved">Approved</span></td></tr>
+              <tr><td><input type="checkbox"></td><td style="color:#1565c0;font-weight:500;cursor:pointer;">4500001239</td><td>NB</td><td>Henkel AG (100006)</td><td>Chemicals</td><td>1000</td><td>EUR</td><td>5,600.00</td><td>2026-07-01</td><td><div class="progress-bar-wrap" style="width:60px;display:inline-block;vertical-align:middle;"><div class="progress-bar-fill" style="width:100%;background:#2e7d32;"></div></div> Full</td><td><span class="status-badge status-received">Received</span></td></tr>
+              <tr><td><input type="checkbox"></td><td style="color:#1565c0;font-weight:500;cursor:pointer;">4500001240</td><td>NB</td><td>Linde AG (100007)</td><td>Industrial Gas</td><td>2000</td><td>EUR</td><td>22,400.00</td><td>2026-07-08</td><td><div class="progress-bar-wrap" style="width:60px;display:inline-block;vertical-align:middle;"><div class="progress-bar-fill" style="width:0%;"></div></div> None</td><td><span class="status-badge status-approved">Approved</span></td></tr>
+            </tbody>
+          </table>
+          <div style="padding:10px 14px; display:flex; justify-content: space-between; align-items:center; font-size:12px; color:var(--color-text-tertiary); border-top: 0.5px solid var(--color-border-tertiary);">
+            <span>7 of 47 records · Total: <strong>€190,940.00</strong></span>
+            <div style="display:flex;gap:6px;">
+              <button class="btn-sap-outline" style="font-size:11px;padding:4px 8px;"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+              <span style="padding:4px 8px;background:var(--color-background-secondary);border-radius:4px;font-size:11px;">1 / 7</span>
+              <button class="btn-sap-outline" style="font-size:11px;padding:4px 8px;"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PO CREATE VIEW (ME21N) -->
+      <div id="view-po-create" style="display:none;">
+        <div class="sap-breadcrumb">SAP S/4HANA / MM / ME21N — Create Purchase Order</div>
+        <div class="sap-page-header">
+          <div class="sap-page-title">Create Purchase Order (ME21N)</div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-sap-outline" onclick="showView('po-list')"><i class="ti ti-x" aria-hidden="true"></i> Discard</button>
+            <button class="btn-sap" onclick="savePO()"><i class="ti ti-device-floppy" aria-hidden="true"></i> Save</button>
+          </div>
+        </div>
+
+        <div class="alert-banner alert-info">
+          <i class="ti ti-info-circle" aria-hidden="true"></i>
+          Transaction ME21N — Standard PO · Document type NB · Company Code DE01
+        </div>
+
+        <div class="section-card" style="margin-bottom:10px;">
+          <div class="section-card-header"><span class="section-card-title">Header Data</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;padding:14px;">
+            <div class="field-group">
+              <div class="field-label">Document Type</div>
+              <select class="sap-select" style="width:100%;padding:6px 8px;">
+                <option selected>NB – Standard PO</option>
+                <option>FO – Framework Order</option>
+                <option>UB – Stock Transfer Order</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <div class="field-label">Vendor *</div>
+              <input class="sap-input" placeholder="Vendor no. or name" style="width:100%;" id="po-vendor">
+            </div>
+            <div class="field-group">
+              <div class="field-label">Purchasing Org.</div>
+              <select class="sap-select" style="width:100%;">
+                <option>1000 – Deutschland</option><option>2000 – Europa</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <div class="field-label">Purchasing Group</div>
+              <select class="sap-select" style="width:100%;">
+                <option>001 – General Purchasing</option><option>002 – Engineering</option><option>003 – IT Procurement</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-card-header"><span class="section-card-title">Line Items</span>
+            <button class="btn-sap-outline" style="font-size:11px;padding:4px 10px;" onclick="addPOLine()"><i class="ti ti-plus" aria-hidden="true"></i> Add Item</button>
+          </div>
+          <table class="sap-table" id="po-lines-table">
+            <thead><tr>
+              <th>Item</th><th>Material</th><th>Short Text</th><th>Plant</th><th>Stor. Loc.</th>
+              <th>Qty</th><th>UoM</th><th>Net Price</th><th>Currency</th><th>Del. Date</th><th>Tax Code</th><th></th>
+            </tr></thead>
+            <tbody id="po-lines-body">
+              <tr>
+                <td>10</td>
+                <td><input class="sap-input" placeholder="Material no." style="width:100px;"></td>
+                <td><input class="sap-input" placeholder="Description" style="width:130px;"></td>
+                <td><select class="sap-select"><option>1000</option><option>2000</option><option>3000</option></select></td>
+                <td><input class="sap-input" placeholder="0001" style="width:60px;"></td>
+                <td><input class="sap-input" type="number" placeholder="0" style="width:60px;"></td>
+                <td><select class="sap-select"><option>EA</option><option>KG</option><option>L</option><option>M</option><option>PC</option></select></td>
+                <td><input class="sap-input" type="number" placeholder="0.00" style="width:80px;"></td>
+                <td><select class="sap-select"><option>EUR</option><option>USD</option><option>GBP</option></select></td>
+                <td><input class="sap-input" type="date" style="width:120px;"></td>
+                <td><select class="sap-select"><option>V1</option><option>A1</option></select></td>
+                <td><button class="btn-sap-outline" style="padding:3px 8px;font-size:11px;color:#c62828;border-color:#c62828;"><i class="ti ti-trash" aria-hidden="true"></i></button></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="padding:10px 14px;border-top:0.5px solid var(--color-border-tertiary);display:flex;justify-content:flex-end;gap:20px;font-size:12px;">
+            <span>Subtotal: <strong>—</strong></span>
+            <span>Tax (19%): <strong>—</strong></span>
+            <span style="font-size:13px;font-weight:500;color:var(--color-text-primary);">Total: <strong>—</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PO DETAIL VIEW -->
+      <div id="view-po-detail" style="display:none;">
+        <div class="sap-breadcrumb">SAP S/4HANA / MM / ME23N — Display Purchase Order</div>
+        <div class="sap-page-header">
+          <div class="sap-page-title">Purchase Order 4500001234 — Siemens AG</div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-sap-outline" onclick="showView('po-list')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+            <button class="btn-sap-outline"><i class="ti ti-pencil" aria-hidden="true"></i> Edit (ME22N)</button>
+            <button class="btn-sap"><i class="ti ti-printer" aria-hidden="true"></i> Print</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:12px;align-items:center;">
+          <span class="status-badge status-approved" style="font-size:12px;padding:4px 12px;"><i class="ti ti-check" aria-hidden="true"></i> Approved — Release Strategy L2</span>
+          <span style="font-size:12px;color:var(--color-text-tertiary);">Created by H.Missaoui · 2026-06-10 · Changed: 2026-06-12</span>
+        </div>
+        <div class="tab-bar">
+          <div class="tab active" onclick="switchTab(event,'tab-header')">Header</div>
+          <div class="tab" onclick="switchTab(event,'tab-items')">Items</div>
+          <div class="tab" onclick="switchTab(event,'tab-delivery')">Delivery / Invoice</div>
+          <div class="tab" onclick="switchTab(event,'tab-history')">PO History</div>
+        </div>
+        <div class="section-card" style="border-top-left-radius:0;border-top-right-radius:0;">
+          <div id="tab-header" class="tab-content active">
+            <div class="po-detail-grid">
+              <div>
+                <div class="field-group"><div class="field-label">PO Number</div><div class="field-value">4500001234</div></div>
+                <div class="field-group"><div class="field-label">Document Type</div><div class="field-value">NB — Standard Purchase Order</div></div>
+                <div class="field-group"><div class="field-label">Vendor</div><div class="field-value" style="color:#1565c0;">100001 — Siemens AG, Munich</div></div>
+                <div class="field-group"><div class="field-label">Terms of Payment</div><div class="field-value">Z030 — Net 30 days</div></div>
+              </div>
+              <div>
+                <div class="field-group"><div class="field-label">Purchasing Org.</div><div class="field-value">1000 — Deutschland</div></div>
+                <div class="field-group"><div class="field-label">Purchasing Group</div><div class="field-value">001 — General Purchasing</div></div>
+                <div class="field-group"><div class="field-label">Company Code</div><div class="field-value">DE01 — DevScale GmbH</div></div>
+                <div class="field-group"><div class="field-label">Currency / Exchange Rate</div><div class="field-value">EUR / 1.00000</div></div>
+              </div>
+            </div>
+          </div>
+          <div id="tab-items" class="tab-content">
+            <table class="sap-table">
+              <thead><tr><th>Item</th><th>Material</th><th>Description</th><th>Plant</th><th>Qty</th><th>UoM</th><th>Net Price</th><th>Net Value</th><th>Delivery Date</th><th>GR Status</th></tr></thead>
+              <tbody>
+                <tr><td>10</td><td style="color:#1565c0;">MAT-78231</td><td>Industrial Motor 7.5kW IE3</td><td>1000</td><td>10</td><td>EA</td><td>€4,000.00</td><td>€40,000.00</td><td>2026-06-28</td><td><span class="status-badge status-received" style="font-size:10px;">GR Done</span></td></tr>
+                <tr><td>20</td><td style="color:#1565c0;">MAT-78232</td><td>Motor Control Cable 4x2.5mm²</td><td>1000</td><td>50</td><td>M</td><td>€50.00</td><td>€2,500.00</td><td>2026-06-28</td><td><span class="status-badge status-received" style="font-size:10px;">GR Done</span></td></tr>
+              </tbody>
+            </table>
+            <div style="padding:10px 14px;display:flex;justify-content:flex-end;gap:20px;font-size:12px;border-top:0.5px solid var(--color-border-tertiary);">
+              <span>Net Value: <strong>€42,500.00</strong></span>
+              <span>VAT (19%): <strong>€8,075.00</strong></span>
+              <span style="font-size:13px;font-weight:500;">Gross Total: <strong>€50,575.00</strong></span>
+            </div>
+          </div>
+          <div id="tab-delivery" class="tab-content">
+            <div class="po-detail-grid">
+              <div>
+                <div class="field-group"><div class="field-label">Delivery Address</div><div class="field-value">Plant 1000 · Gutleutstrasse 12, 60329 Frankfurt</div></div>
+                <div class="field-group"><div class="field-label">Incoterms</div><div class="field-value">DAP — Delivered at Place</div></div>
+                <div class="field-group"><div class="field-label">GR-Based Invoice Verification</div><div class="field-value" style="color:#2e7d32;"><i class="ti ti-check" aria-hidden="true"></i> Active</div></div>
+              </div>
+              <div>
+                <div class="field-group"><div class="field-label">Invoice Currency</div><div class="field-value">EUR</div></div>
+                <div class="field-group"><div class="field-label">Payment Terms</div><div class="field-value">Z030 — 30 days net</div></div>
+                <div class="field-group"><div class="field-label">Tax Code</div><div class="field-value">V1 — Input Tax 19%</div></div>
+              </div>
+            </div>
+          </div>
+          <div id="tab-history" class="tab-content">
+            <table class="sap-table">
+              <thead><tr><th>Date</th><th>Time</th><th>User</th><th>Action</th><th>Document</th><th>Amount</th></tr></thead>
+              <tbody>
+                <tr><td>2026-06-10</td><td>09:12</td><td>H.MISSAOUI</td><td>PO Created</td><td>4500001234</td><td>€42,500.00</td></tr>
+                <tr><td>2026-06-10</td><td>11:30</td><td>SYSTEM</td><td>Sent for approval (L1)</td><td>—</td><td>—</td></tr>
+                <tr><td>2026-06-11</td><td>08:55</td><td>K.SCHMIDT</td><td>Approved (L1)</td><td>—</td><td>—</td></tr>
+                <tr><td>2026-06-12</td><td>14:20</td><td>M.HOFFMAN</td><td>Approved (L2) — Released</td><td>—</td><td>—</td></tr>
+                <tr><td>2026-06-14</td><td>10:45</td><td>H.MISSAOUI</td><td>Goods Receipt Posted</td><td>5000000112</td><td>€42,500.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- VENDOR MASTER -->
+      <div id="view-vendors" style="display:none;">
+        <div class="sap-breadcrumb">SAP S/4HANA / MM / MK03 — Vendor Master</div>
+        <div class="sap-page-header">
+          <div class="sap-page-title">Vendor Master Data</div>
+          <button class="btn-sap"><i class="ti ti-plus" aria-hidden="true"></i> Create Vendor (MK01)</button>
+        </div>
+        <div class="section-card">
+          <div class="filter-row">
+            <input class="sap-input" placeholder="Vendor number or name" style="width:180px;">
+            <select class="sap-select"><option>All Countries</option><option>Germany</option><option>France</option><option>USA</option></select>
+            <select class="sap-select"><option>All Groups</option><option>Industrial</option><option>Chemical</option><option>IT</option><option>Safety</option></select>
+            <button class="btn-sap" style="padding:5px 12px;"><i class="ti ti-search" aria-hidden="true"></i> Search</button>
+          </div>
+          <table class="sap-table">
+            <thead><tr>
+              <th>Vendor No.</th><th>Name</th><th>Country</th><th>City</th><th>Account Group</th>
+              <th>Payment Terms</th><th>YTD Spend</th><th>On-Time %</th><th>Rating</th><th>Status</th>
+            </tr></thead>
+            <tbody>
+              <tr><td style="color:#1565c0;font-weight:500;">100001</td><td>Siemens AG</td><td>DE</td><td>Munich</td><td>LIEF</td><td>Z030</td><td>€180,400</td><td>97%</td><td><span style="background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;">A+</span></td><td><span class="status-badge status-approved" style="font-size:10px;">Active</span></td></tr>
+              <tr><td style="color:#1565c0;font-weight:500;">100002</td><td>BASF SE</td><td>DE</td><td>Ludwigshafen</td><td>LIEF</td><td>Z060</td><td>€95,200</td><td>88%</td><td><span style="background:#e3f2fd;color:#1565c0;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;">A</span></td><td><span class="status-badge status-approved" style="font-size:10px;">Active</span></td></tr>
+              <tr><td style="color:#1565c0;font-weight:500;">100003</td><td>Bosch GmbH</td><td>DE</td><td>Stuttgart</td><td>LIEF</td><td>Z030</td><td>€44,100</td><td>91%</td><td><span style="background:#e3f2fd;color:#1565c0;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;">A</span></td><td><span class="status-badge status-approved" style="font-size:10px;">Active</span></td></tr>
+              <tr><td style="color:#1565c0;font-weight:500;">100004</td><td>3M Deutschland GmbH</td><td>DE</td><td>Neuss</td><td>LIEF</td><td>Z045</td><td>€21,800</td><td>79%</td><td><span style="background:#fff8e1;color:#f57f17;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;">B</span></td><td><span class="status-badge status-approved" style="font-size:10px;">Active</span></td></tr>
+              <tr><td style="color:#1565c0;font-weight:500;">100005</td><td>ABB Ltd</td><td>CH</td><td>Zurich</td><td>LIEF</td><td>Z030</td><td>€310,000</td><td>94%</td><td><span style="background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;">A+</span></td><td><span class="status-badge status-approved" style="font-size:10px;">Active</span></td></tr>
+              <tr><td style="color:#1565c0;font-weight:500;">100006</td><td>Henkel AG</td><td>DE</td><td>Düsseldorf</td><td>LIEF</td><td>Z030</td><td>€12,400</td><td>100%</td><td><span style="background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;">A+</span></td><td><span class="status-badge status-approved" style="font-size:10px;">Active</span></td></tr>
+              <tr><td style="color:#1565c0;font-weight:500;">100007</td><td>Linde AG</td><td>DE</td><td>Munich</td><td>LIEF</td><td>Z030</td><td>€67,200</td><td>85%</td><td><span style="background:#e3f2fd;color:#1565c0;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;">A</span></td><td><span class="status-badge status-approved" style="font-size:10px;">Active</span></td></tr>
+              <tr><td style="color:#1565c0;font-weight:500;">100008</td><td>Thyssen Krupp AG</td><td>DE</td><td>Essen</td><td>LIEF</td><td>Z060</td><td>€8,900</td><td>62%</td><td><span style="background:#ffebee;color:#c62828;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;">C</span></td><td><span class="status-badge status-pending" style="font-size:10px;">Review</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ANALYTICS VIEW -->
+      <div id="view-analytics" style="display:none;">
+        <div class="sap-breadcrumb">SAP S/4HANA / MM / ME2A — Spend Analytics</div>
+        <div class="sap-page-header">
+          <div class="sap-page-title">Procurement Spend Analytics — FY 2026</div>
+          <button class="btn-sap-outline"><i class="ti ti-download" aria-hidden="true"></i> Export</button>
+        </div>
+        <div class="metric-row">
+          <div class="metric-card"><div class="metric-label">Total YTD Spend</div><div class="metric-value">€2.83M</div><div class="metric-delta delta-up">↓ 5% vs FY2025</div></div>
+          <div class="metric-card"><div class="metric-label">Active Vendors</div><div class="metric-value">8</div><div class="metric-delta" style="color:var(--color-text-tertiary);">+1 new this quarter</div></div>
+          <div class="metric-card"><div class="metric-label">Avg. PO Cycle Time</div><div class="metric-value">4.2d</div><div class="metric-delta delta-up">↓ 0.8d vs target</div></div>
+          <div class="metric-card"><div class="metric-label">Savings Achieved</div><div class="metric-value" style="color:#2e7d32;">€148K</div><div class="metric-delta delta-up">+12% vs plan</div></div>
+        </div>
+        <div class="chart-row">
+          <div class="section-card">
+            <div class="section-card-header"><span class="section-card-title">Spend by Material Group (YTD)</span></div>
+            <div style="padding:12px;"><div class="chart-wrap"><canvas id="catChart" role="img" aria-label="Horizontal bar chart showing spend by material group">Material group spend breakdown.</canvas></div></div>
+          </div>
+          <div class="section-card">
+            <div class="section-card-header"><span class="section-card-title">Top Vendors by Spend (YTD)</span></div>
+            <div style="padding:12px;"><div class="chart-wrap"><canvas id="vendorChart" role="img" aria-label="Horizontal bar chart showing spend by vendor">Vendor spend breakdown.</canvas></div></div>
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="section-card-header"><span class="section-card-title">Spend Trend — Monthly (Jan–Jun 2026)</span></div>
+          <div style="padding:12px;"><div style="position:relative;height:200px;"><canvas id="trendChart" role="img" aria-label="Line chart showing monthly spend trend Jan to Jun 2026">Monthly spend Jan: 380k, Feb: 420k, Mar: 510k, Apr: 480k, May: 530k, Jun: 510k.</canvas></div></div>
+        </div>
+      </div>
+
+      <!-- GOODS RECEIPT VIEW (MIGO) -->
+      <div id="view-gr" style="display:none;">
+        <div class="sap-breadcrumb">SAP S/4HANA / MM / MIGO — Goods Receipt for Purchase Order</div>
+        <div class="sap-page-header">
+          <div class="sap-page-title">Post Goods Receipt (MIGO)</div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-sap-outline"><i class="ti ti-x" aria-hidden="true"></i> Cancel</button>
+            <button class="btn-sap" onclick="postGR()"><i class="ti ti-check" aria-hidden="true"></i> Post (CTRL+S)</button>
+          </div>
+        </div>
+        <div class="section-card" style="margin-bottom:10px;">
+          <div class="section-card-header"><span class="section-card-title">Document Header</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;padding:14px;">
+            <div class="field-group">
+              <div class="field-label">Transaction</div>
+              <select class="sap-select" style="width:100%;"><option selected>Goods Receipt</option><option>Return Delivery</option><option>Transfer Posting</option></select>
+            </div>
+            <div class="field-group">
+              <div class="field-label">Reference Document</div>
+              <select class="sap-select" style="width:100%;"><option>Purchase Order</option></select>
+            </div>
+            <div class="field-group">
+              <div class="field-label">PO Number *</div>
+              <input class="sap-input" placeholder="4500001235" style="width:100%;">
+            </div>
+            <div class="field-group">
+              <div class="field-label">Posting Date</div>
+              <input class="sap-input" type="date" value="2026-06-14" style="width:100%;">
+            </div>
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="section-card-header"><span class="section-card-title">Item Overview</span></div>
+          <table class="sap-table">
+            <thead><tr>
+              <th><input type="checkbox" style="margin:0;"></th>
+              <th>Item</th><th>Material</th><th>Description</th><th>OK</th>
+              <th>Qty</th><th>UoM</th><th>Open Qty</th><th>Storage Loc.</th><th>Movement Type</th><th>Batch</th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox" checked></td>
+                <td>10</td>
+                <td style="color:#1565c0;">MAT-78231</td>
+                <td>Industrial Motor 7.5kW IE3</td>
+                <td><input type="checkbox" checked></td>
+                <td><input class="sap-input" type="number" value="10" style="width:60px;"></td>
+                <td>EA</td>
+                <td style="color:#2e7d32;font-weight:500;">0</td>
+                <td><select class="sap-select"><option>0001 – Main WH</option><option>0002 – Staging</option></select></td>
+                <td>101 – GR for PO</td>
+                <td><input class="sap-input" placeholder="Optional" style="width:80px;"></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked></td>
+                <td>20</td>
+                <td style="color:#1565c0;">MAT-78232</td>
+                <td>Control Cable 4x2.5mm²</td>
+                <td><input type="checkbox" checked></td>
+                <td><input class="sap-input" type="number" value="50" style="width:60px;"></td>
+                <td>M</td>
+                <td style="color:#2e7d32;font-weight:500;">0</td>
+                <td><select class="sap-select"><option>0001 – Main WH</option><option>0002 – Staging</option></select></td>
+                <td>101 – GR for PO</td>
+                <td><input class="sap-input" placeholder="Optional" style="width:80px;"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div id="gr-confirm" style="display:none;padding:10px 14px;" class="alert-banner alert-info">
+            <i class="ti ti-check-circle" aria-hidden="true"></i>
+            Material document <strong>5000000113</strong> posted · Movement Type 101 · 2026-06-14
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+var chartsInit = {};
+
+function showView(view) {
+  var views = ['dashboard','po-list','po-create','po-detail','vendors','analytics','gr'];
+  views.forEach(function(v) {
+    var el = document.getElementById('view-' + v);
+    if (el) el.style.display = (v === view) ? 'block' : 'none';
+  });
+  document.querySelectorAll('.sap-nav-item').forEach(function(n) { n.classList.remove('active'); });
+  var navMap = {dashboard:0,'po-list':1,'po-create':2,vendors:3,analytics:4,gr:5};
+  if (navMap[view] !== undefined) {
+    document.querySelectorAll('.sap-nav-item')[navMap[view]].classList.add('active');
+  }
+  document.querySelectorAll('.sap-sidebar-item').forEach(function(n) { n.classList.remove('active'); });
+  if (view === 'dashboard') {
+    initDashboardCharts();
+  }
+  if (view === 'analytics') {
+    initAnalyticsCharts();
+  }
+}
+
+function showPODetail(poNum) {
+  showView('po-detail');
+}
+
+function switchTab(event, tabId) {
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.tab-content').forEach(function(t) { t.classList.remove('active'); });
+  event.target.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+function savePO() {
+  var vendor = document.getElementById('po-vendor').value;
+  if (!vendor) { alert('Please enter a vendor.'); return; }
+  alert('Purchase Order saved as DRAFT — awaiting approval workflow L1.');
+  showView('po-list');
+}
+
+var lineCount = 1;
+function addPOLine() {
+  lineCount++;
+  var tbody = document.getElementById('po-lines-body');
+  var row = document.createElement('tr');
+  row.innerHTML = '<td>' + (lineCount * 10) + '</td>' +
+    '<td><input class="sap-input" placeholder="Material no." style="width:100px;"></td>' +
+    '<td><input class="sap-input" placeholder="Description" style="width:130px;"></td>' +
+    '<td><select class="sap-select"><option>1000</option><option>2000</option><option>3000</option></select></td>' +
+    '<td><input class="sap-input" placeholder="0001" style="width:60px;"></td>' +
+    '<td><input class="sap-input" type="number" placeholder="0" style="width:60px;"></td>' +
+    '<td><select class="sap-select"><option>EA</option><option>KG</option><option>L</option><option>M</option><option>PC</option></select></td>' +
+    '<td><input class="sap-input" type="number" placeholder="0.00" style="width:80px;"></td>' +
+    '<td><select class="sap-select"><option>EUR</option><option>USD</option><option>GBP</option></select></td>' +
+    '<td><input class="sap-input" type="date" style="width:120px;"></td>' +
+    '<td><select class="sap-select"><option>V1</option><option>A1</option></select></td>' +
+    '<td><button class="btn-sap-outline" style="padding:3px 8px;font-size:11px;color:#c62828;border-color:#c62828;" onclick="this.closest(\'tr\').remove()"><i class="ti ti-trash"></i></button></td>';
+  tbody.appendChild(row);
+}
+
+function postGR() {
+  document.getElementById('gr-confirm').style.display = 'flex';
+}
+
+function initDashboardCharts() {
+  if (chartsInit.dashboard) return;
+  chartsInit.dashboard = true;
+  new Chart(document.getElementById('spendChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+      datasets: [
+        { label: 'Electrical', data: [120,140,160,130,150,180], backgroundColor: '#1565c0' },
+        { label: 'Chemicals', data: [80,90,100,85,110,95], backgroundColor: '#2e7d32' },
+        { label: 'Mechanical', data: [50,60,70,55,65,80], backgroundColor: '#f57f17' }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true, labels: { font: { size: 11 }, boxWidth: 12 } } },
+      scales: {
+        x: { stacked: true, ticks: { font: { size: 10 } } },
+        y: { stacked: true, ticks: { font: { size: 10 }, callback: function(v) { return '€' + v + 'K'; } } }
+      }
+    }
+  });
+  new Chart(document.getElementById('statusChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Approved','Ordered','Received','Pending','Draft'],
+      datasets: [{ data: [40,25,18,9,8], backgroundColor: ['#2e7d32','#1565c0','#00695c','#f57f17','#6a1b9a'], borderWidth: 0 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '60%',
+      plugins: { legend: { position: 'right', labels: { font: { size: 11 }, boxWidth: 12, padding: 10 } } }
+    }
+  });
+}
+
+function initAnalyticsCharts() {
+  if (chartsInit.analytics) return;
+  chartsInit.analytics = true;
+  new Chart(document.getElementById('catChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Control Systems','Electrical','Industrial Gas','Chemicals','Mech. Parts','Safety'],
+      datasets: [{ label: 'Spend (€K)', data: [310,180,90,95,44,22], backgroundColor: '#1565c0' }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { x: { ticks: { callback: function(v) { return '€' + v + 'K'; }, font: { size: 10 } } }, y: { ticks: { font: { size: 10 } } } }
+    }
+  });
+  new Chart(document.getElementById('vendorChart'), {
+    type: 'bar',
+    data: {
+      labels: ['ABB Ltd','Siemens AG','Linde AG','BASF SE','Bosch','Henkel','3M','ThyssenKrupp'],
+      datasets: [{ label: 'Spend (€K)', data: [310,180,67,95,44,12,22,9], backgroundColor: '#2e7d32' }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { x: { ticks: { callback: function(v) { return '€' + v + 'K'; }, font: { size: 10 } } }, y: { ticks: { font: { size: 10 } } } }
+    }
+  });
+  new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+      labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+      datasets: [
+        { label: 'Actual Spend', data: [380,420,510,480,530,510], borderColor: '#1565c0', backgroundColor: 'rgba(21,101,192,0.08)', tension: 0.3, fill: true, pointBackgroundColor: '#1565c0', pointRadius: 4 },
+        { label: 'Budget', data: [400,400,500,500,500,500], borderColor: '#c62828', borderDash: [5,5], tension: 0, fill: false, pointRadius: 0 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { font: { size: 11 }, boxWidth: 12 } } },
+      scales: {
+        x: { ticks: { font: { size: 10 } } },
+        y: { ticks: { font: { size: 10 }, callback: function(v) { return '€' + v + 'K'; } } }
+      }
+    }
+  });
+}
+
+initDashboardCharts();
+</script>
